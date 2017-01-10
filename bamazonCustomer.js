@@ -74,7 +74,7 @@ function buyProduct() {
                     // total price is price of 1 item * quantity purchased
                     var total = price * answers.quantity;
                     // let user know of their success in purchasing their items
-                    console.log("Success, you've purchased " + answers.quantity + " of " + prodSelected + " for the price of " + total + ".");
+                    console.log("Success, you've purchased " + answers.quantity + " of " + prodSelected + " for the price of $" + total + ".");
                     // restarts function to buy items
                     buyProduct();
                 });
