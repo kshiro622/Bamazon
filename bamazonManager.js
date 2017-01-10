@@ -50,4 +50,24 @@ function viewProd() {
                 "\n");
         }
     });
+    initialize();
+}
+
+function viewLow() {
+    connection.query("SELECT * FROM products WHERE stock_quantity < ?", [5], function(err, res) {
+        if (err) throw err;
+        if (res.length > 1) {
+            for (var j = 0; j < res.length; j++) {
+                console.log("ID: " + res[j].item_id +
+                    " || Product: " + res[j].product_name +
+                    " || Price: " + res[j].price +
+                    " || Stock Qty: " + res[j].stock_quantity +
+                    " || Department: " + res[j].department_name +
+                    "\n");
+            }
+        } else {
+            console.log("There are no low inventory items.");
+        }
+    });
+    initialize();
 }
