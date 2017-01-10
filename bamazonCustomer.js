@@ -1,13 +1,14 @@
 //npm packages
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var password = require("./password.js");
 
 //database connection info
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "shiro210130",
+    password: password.mySqlPw.password,
     database: "bamazon_db"
 });
 
