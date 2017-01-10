@@ -45,8 +45,22 @@ function buyProduct() {
         connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [answers.product_id], function(err, res) {
             if (answers.quantity > res[0].stock_quantity) {
                 console.log("Insufficient quantity!");
+                buyProduct();
             } else {
-                console.log("success");
+                var newQty = res[0].stock_quantity - answers.quantity;
+                var prodSelected;
+                connection.query("SELECT product_name FROM products WHERE item_id = ?", [answers.product_id], function(err, res) {
+                    prodSelected = res[0].product_name;
+                });
+                connection.query("UPDATE products SET ? WHERE ?", [{
+                    stock_quantity: newQty
+                }, {
+                    item_id: answers.product_id
+                }], function(err, res) {
+                    if (err) throw err;
+                    console.log("Success, you've purchased " + answers.quantity + " of " + prodSelected + ".");
+                    buyProduct();
+                });
             }
         });
     });
