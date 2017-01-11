@@ -22,10 +22,13 @@ initialize();
 
 // ========== FUNCTIONS =========== //
 
-function initialize() {}
-inquirer.prompt([{
+function initialize() {
+    inquirer.prompt([{
         name: "action",
         message: "Select an action.",
         type: "list",
         choices: ["View Product Sales by Department", "Create New Department"]
-    }]).then(function(answers) {}
+    }]).then(function(answers) {
+        console.log(answers.action);
+    });
+}
