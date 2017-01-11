@@ -20,7 +20,8 @@ connection.connect(function(err) {
 // intializes app
 initialize();
 
-// functions
+// ========== FUNCTIONS =========== //
+
 function initialize() {
     // selects all data from products table
     connection.query("SELECT * FROM products", function(err, res) {
@@ -57,26 +58,29 @@ function buyProduct() {
             } else {
                 // there is enough in stock to fulfill purchase
                 var newQty = res[0].stock_quantity - answers.quantity;
-                var prodSelected;
-                var price;
-                // set product_name equal to prodSelected and price equal to price
+                // select info from products about product specified by user
                 connection.query("SELECT * FROM products WHERE item_id = ?", [answers.product_id], function(err, res) {
-                    prodSelected = res[0].product_name;
-                    price = res[0].price;
-                });
-                // update table with new quantity
-                connection.query("UPDATE products SET ? WHERE ?", [{
-                    stock_quantity: newQty
-                }, {
-                    item_id: answers.product_id
-                }], function(err, res) {
-                    if (err) throw err;
+                    // set product, price, and sales equal to variables
+                    var prodSelected = res[0].product_name;
+                    var price = res[0].price;
+                    var prodSales = parseFloat(res[0].product_sales);
                     // total price is price of 1 item * quantity purchased
-                    var total = price * answers.quantity;
-                    // let user know of their success in purchasing their items
-                    console.log("Success, you've purchased " + answers.quantity + " of " + prodSelected + " for the price of $" + total + ".");
-                    // restarts function to buy items
-                    buyProduct();
+                    var total = parseFloat(price * answers.quantity);
+                    // new product sales figure is old product sales plus new sales
+                    var newProdSales = prodSales + total;
+                    // update table with new quantity
+                    connection.query("UPDATE products SET ? WHERE ?", [{
+                        stock_quantity: newQty,
+                        product_sales: newProdSales
+                    }, {
+                        item_id: answers.product_id
+                    }], function(err, res) {
+                        if (err) throw err;
+                        // let user know of their success in purchasing their items
+                        console.log("Success, you've purchased " + answers.quantity + " of " + prodSelected + " for the price of $" + total + ".");
+                        // restarts function to buy items
+                        buyProduct();
+                    });
                 });
             }
         });
