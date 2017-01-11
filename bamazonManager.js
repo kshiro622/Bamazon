@@ -31,7 +31,13 @@ function initialize() {
         } else if (answers.action === "View Low Inventory") {
             viewLow();
         } else if (answers.action === "Add to Inventory") {
-            addInv();
+            var products = [];
+            connection.query("SELECT product_name FROM products", function(err, res) {
+                for (h = 0; h < res.length; h++) {
+                    products.push(res[h].product_name);
+                }
+                addInv(products);
+            });
         } else if (answers.action === "Add New Product") {
             addProd();
         }
@@ -70,4 +76,32 @@ function viewLow() {
         }
     });
     initialize();
+}
+
+function addInv(array) {
+    inquirer.prompt([{
+        name: "item",
+        message: "Which item would you like to add inventory to?",
+        type: "list",
+        choices: array
+    }, {
+        name: "amount",
+        message: "How many more units would you like to add?"
+    }]).then(function(answers) {
+        connection.query("SELECT stock_quantity FROM products WHERE product_name = ?", [answers.item], function(err, res) {
+            var stockQty = parseInt(answers.amount) + parseInt(res[0].stock_quantity);
+            connection.query("UPDATE products SET ? WHERE ?", [{
+                stock_quantity: stockQty
+            }, {
+                product_name: answers.item
+            }], function(err, res) {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log("The inventory for " + answers.item + " is now " + stockQty + " units.\n");
+                }
+                initialize();
+            });
+        });
+    });
 }
