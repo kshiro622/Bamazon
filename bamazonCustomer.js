@@ -64,11 +64,27 @@ function buyProduct() {
                     var prodSelected = res[0].product_name;
                     var price = res[0].price;
                     var prodSales = parseFloat(res[0].product_sales);
+                    var department = res[0].department_name;
                     // total price is price of 1 item * quantity purchased
                     var total = parseFloat(price * answers.quantity);
                     // new product sales figure is old product sales plus new sales
                     var newProdSales = prodSales + total;
-                    // update table with new quantity
+                    //update departments table with new product sales
+                    connection.query("SELECT total_sales FROM departments WHERE department_name = ?", [department], function(err, res) {
+                        // represents previous department sales
+                        var dptSales = parseFloat(res[0].total_sales);
+                        // adds new sale to previous department sales
+                        var newDptSales = dptSales + total;
+                        // updates total sales
+                        connection.query("UPDATE departments SET ? WHERE ?", [{
+                            total_sales: newDptSales
+                        }, {
+                            department_name: department
+                        }], function(err, res) {
+                            if (err) throw err;
+                        });
+                    });
+                    // update product table with new quantity and product sales
                     connection.query("UPDATE products SET ? WHERE ?", [{
                         stock_quantity: newQty,
                         product_sales: newProdSales
@@ -77,9 +93,9 @@ function buyProduct() {
                     }], function(err, res) {
                         if (err) throw err;
                         // let user know of their success in purchasing their items
-                        console.log("Success, you've purchased " + answers.quantity + " of " + prodSelected + " for the price of $" + total + ".");
+                        console.log("\nSuccess, you've purchased " + answers.quantity + " of " + prodSelected + " for the price of $" + total + ".\n");
                         // restarts function to buy items
-                        buyProduct();
+                        initialize();
                     });
                 });
             }
