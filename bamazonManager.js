@@ -36,7 +36,6 @@ function initialize() {
             viewLow();
         } else if (answers.action === "Add to Inventory") {
             // create an array of current products
-
             var products = [];
             connection.query("SELECT product_name FROM products", function(err, res) {
                 for (h = 0; h < res.length; h++) {
@@ -55,15 +54,16 @@ function viewProd() {
     // select all data from products table
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
+        console.log("\nALL PRODUCTS");
         // log info for all products in database
         for (var i = 0; i < res.length; i++) {
             console.log("\nID: " + res[i].item_id +
                 " || Product: " + res[i].product_name +
                 " || Price: " + res[i].price +
                 " || Stock Qty: " + res[i].stock_quantity +
-                " || Department: " + res[i].department_name +
-                "\n");
+                " || Department: " + res[i].department_name);
         }
+        console.log("\n");
         // re-initilize app
         initialize();
     });
@@ -75,14 +75,13 @@ function viewLow() {
         if (err) throw err;
         // if there is at least 1 result, display info for product(s)
         if (res.length > 1) {
+            console.log("\nLOW INVENTORY");
             for (var j = 0; j < res.length; j++) {
-                console.log("ID: " + res[j].item_id +
+                console.log("\nID: " + res[j].item_id +
                     " || Product: " + res[j].product_name +
-                    " || Price: " + res[j].price +
-                    " || Stock Qty: " + res[j].stock_quantity +
-                    " || Department: " + res[j].department_name +
-                    "\n");
+                    " || Stock Qty: " + res[j].stock_quantity);
             }
+            console.log("\n");
             // if there are no results, let user know
         } else {
             console.log("\nThere are no low inventory items!\n");
