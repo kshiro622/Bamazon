@@ -43,8 +43,8 @@ function initialize() {
 function viewDptSales() {
     // create new table
     var salesTable = new Table({
-        head: ["Department Id", "Department Name", "Overhead Costs", "Total Sales", "Total Profit"],
-        colWidths: [20, 20, 20, 20, 20]
+        head: ["Id", "Department Name", "Overhead", "Total Sales", "Total Profit"],
+        colWidths: [5, 20, 15, 15, 15]
     });
     // select info from departments table
     connection.query("SELECT * FROM departments", function(err, res) {
@@ -81,7 +81,7 @@ function createDpt() {
         // make sure supervisor wants to add this department
         inquirer.prompt([{
             name: "validation",
-            message: "Are you sure you want to add " + answers.product + " to the store?",
+            message: "Are you sure you want to add " + dptName + " to the store?",
             type: "list",
             choices: ["Yes", "No"]
         }]).then(function(answers) {

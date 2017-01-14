@@ -2,6 +2,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var password = require("./password.js");
+var Table = require("cli-table");
 
 //database connection info
 var connection = mysql.createConnection({
@@ -51,37 +52,56 @@ function initialize() {
 }
 
 function viewProd() {
+    // create new table
+    var productTable = new Table({
+        head: ["Id", "Product Name", "Price", "Qty.", "Dept."],
+        colWidths: [5, 35, 10, 10, 20]
+    });
     // select all data from products table
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
-        console.log("\nALL PRODUCTS");
+        console.log("ALL PRODUCTS");
         // log info for all products in database
         for (var i = 0; i < res.length; i++) {
-            console.log("\nID: " + res[i].item_id +
-                " || Product: " + res[i].product_name +
-                " || Price: " + res[i].price +
-                " || Stock Qty: " + res[i].stock_quantity +
-                " || Department: " + res[i].department_name);
+            var prodId = res[i].item_id;
+            var prodName = res[i].product_name;
+            var price = res[i].price;
+            var stock = res[i].stock_quantity;
+            var sales = res[i].department_name;
+            productTable.push(
+                [prodId, prodName, price, stock, sales]
+            );
         }
-        console.log("\n");
+        // print table to console
+        console.log(productTable.toString());
         // re-initilize app
         initialize();
     });
 }
 
 function viewLow() {
+    var lowInvTable = new Table({
+        head: ["Id", "Product Name", "Qty."],
+        colWidths: [5, 35, 10]
+    });
     // selects all data from products where stock quantity is < 5
     connection.query("SELECT * FROM products WHERE stock_quantity < ?", [5], function(err, res) {
         if (err) throw err;
         // if there is at least 1 result, display info for product(s)
-        if (res.length > 1) {
+        if (res.length > 0) {
             console.log("\nLOW INVENTORY");
             for (var j = 0; j < res.length; j++) {
-                console.log("\nID: " + res[j].item_id +
-                    " || Product: " + res[j].product_name +
-                    " || Stock Qty: " + res[j].stock_quantity);
+                // variables to store column data
+                var prodId = res[j].item_id;
+                var prodName = res[j].product_name;
+                var qty = res[j].stock_quantity;
+                // push column data into table for each product
+                lowInvTable.push(
+                    [prodId, prodName, qty]
+                );
             }
-            console.log("\n");
+            // print table to console
+            console.log(lowInvTable.toString());
             // if there are no results, let user know
         } else {
             console.log("\nThere are no low inventory items!\n");

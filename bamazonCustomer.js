@@ -2,6 +2,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var password = require("./password.js");
+var Table = require("cli-table");
 
 //database connection info
 var connection = mysql.createConnection({
@@ -23,16 +24,28 @@ initialize();
 // ========== FUNCTIONS =========== //
 
 function initialize() {
+    // create new table
+    var productTable = new Table({
+        head: ["Product Id", "Product Name", "Price"],
+        colWidths: [10, 40, 10]
+    });
     // selects all data from products table
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
         // logs info (ID, product, price) about all items for sale
         console.log("ITEMS FOR SALE");
         for (var i = 0; i < res.length; i++) {
-            console.log("ID: " + res[i].item_id +
-                " || Product: " + res[i].product_name +
-                " || Price: " + res[i].price);
+            // variables to store column data
+            var prodId = res[i].item_id;
+            var prodName = res[i].product_name;
+            var price = res[i].price;
+            // push column data into table for each product
+            productTable.push(
+                [prodId, prodName, price]
+            );
         }
+        // print table to console
+        console.log(productTable.toString());
         // runs function to purchase items
         buyProduct();
     });
