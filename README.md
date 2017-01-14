@@ -21,7 +21,7 @@ Node.js, MySQL, Javascript
         password: 'your password here'
     };
 
-3. Create a MySQL database and tables using the code in schema file
+3. Create database and tables in MySQL using the code in schema file
 4. Install depedencies from package.json file
 
 ##### Customer App
@@ -39,7 +39,7 @@ Managers have four options, to view products for sale, view products with low in
 ##### Supervisor App
 Supervisors can either view all departments and their overhead and sales figures, or add new departments.
 
-5. Enter "node bamazonSupervisorjs" into the command line
+5. Enter "node bamazonSupervisor.js" into the command line
 6. Follow prompts to view all departments and their info, or add a new department
 
 ##Link to App Videos
