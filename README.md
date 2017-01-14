@@ -23,5 +23,5 @@ Managers have four options, to view products for sale, view products with low in
 Supervisors can either view all departments and their overhead and sales figures, or add new departments.
 
 
-##Link to App Video
+##Link to App Videos
 https://drive.google.com/drive/folders/0B1wOinmZNrZIZ2hIQjJHc2ZKZ3c
