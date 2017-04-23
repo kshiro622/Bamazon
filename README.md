@@ -1,10 +1,10 @@
 # Bamazon
 Storefront app with functionality for customers to buy products, managers to view products and add inventory, and supervisors to view total profits.
 
-##Technologies
+## Technologies
 Node.js, MySQL, Javascript
 
-##Built with
+## Built with
 - Sublime Text - Text editor
 - Javascript
 - Node.js - Backend
@@ -12,7 +12,7 @@ Node.js, MySQL, Javascript
 - MySQL - Database
 - Terminal - Runs node app
 
-##How it Works
+## How it Works
 
 1. Clone repo to your local machine
 2. Create a password.js file with the following code, and insert your password where it says "your password here."
@@ -42,5 +42,5 @@ Supervisors can either view all departments and their overhead and sales figures
 5. Enter "node bamazonSupervisor.js" into the command line
 6. Follow prompts to view all departments and their info, or add a new department
 
-##Link to App Videos
+## Link to App Videos
 https://drive.google.com/drive/folders/0B1wOinmZNrZIZ2hIQjJHc2ZKZ3c
